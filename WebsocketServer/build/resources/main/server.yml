@@ -1,0 +1,54 @@
+server:
+  type: simple
+  maxThreads: 6400
+  # これがPUSHサーバのコンテキストパス
+  applicationContextPath: /ws-server
+  adminContextPath: /ws-server-admin
+  connector:
+    type: http
+    port: 38889
+
+logging:
+  level: DEBUG
+
+  loggers:
+     org.eclipse.jetty: DEBUG
+     #org.eclipse.jetty.websocket.common: DEBUG
+
+  appenders:
+#    # Log info, warnings and errors to our apps' main log.
+#    # Rolled over daily and retained for 1 days.
+    - type: file
+      threshold: DEBUG
+      # ログファイル出力先
+      currentLogFilename: ./logs/ws-server.log
+      # ログローテのON/OFF
+      # archive : false
+      # アーカイブログファイル名(圧縮をやるときは.gzをとる。)
+      archivedLogFilenamePattern: ./logs/ws-server-%d.log.gz
+      archivedFileCount: 100
+      timeZone: JST
+      logFormat: "%.5level %date{yyyy/MM/dd HH:mm:ss:SSS}-[%.10t] %logger{0}: %msg%n"
+  
+assets:
+  overrides:
+    # Override requests to /dashboard/${1} to instead look in 
+    # ${working directory}/src/main/resources/assets/${1}
+    /dashboard: src/main/resources/jsp/
+redis:
+  enable: true
+  # The redis server's address; required.
+  #endpoint: redis-server-001.o5hfyj.0001.apne1.cache.amazonaws.com:6379
+  endpoint: localhost:6379
+  # Auth password for redis server connection.  (default: null)
+  #password: null
+  # The minimum number of idle connections to maintain in the pool.  (default: 0)
+  minIdle: 0
+  # The maximum number of idle connections allowed in the pool.  (default: 0)
+  maxIdle: 0
+  # The maximum number of connections allowed in the pool.  (default: 1024)
+  maxTotal: 1924
+  # Enables SSL connection. (default: false)
+  ssl: false
+  # The configured timeout (in milliseconds) for redis connections in the connection pool.  (default: 2000)
+  timeout: 2000

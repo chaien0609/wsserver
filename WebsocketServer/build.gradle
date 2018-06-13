@@ -1,0 +1,56 @@
+buildscript {
+  repositories { 
+  	jcenter() 
+  	
+  }
+  dependencies {
+    classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.0'
+  }
+}
+
+repositories {
+    // ローカルリポジトリ
+    mavenCentral()
+    jcenter() 
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+
+mainClassName = "jp.co.recomot.push.infrastructure.server.dropwizard.main.WsServerApplication"
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+// Set our project variables
+project.ext {
+    dropwizardVersion = '0.8.1'
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+dependencies {
+	compile 'io.dropwizard:dropwizard-core:0.8.1'
+	compile 'io.dropwizard:dropwizard-client:0.8.1'
+	compile 'io.dropwizard-bundles:dropwizard-configurable-assets-bundle:1.0.5'
+
+	compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-xml-provider:2.5.1'
+	compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.5.1'
+
+	//Websocket
+	compile 'org.eclipse.jetty.websocket:websocket-server:9.2.24.v20180105'
+	
+	//Jedis
+	compile 'redis.clients:jedis:2.9.0'
+
+}
+
+shadowJar {
+  exclude 'LICENSE'
+  mergeServiceFiles()
+}
+
+build {
+  dependsOn shadowJar
+}
